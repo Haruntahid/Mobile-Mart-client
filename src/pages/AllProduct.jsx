@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import useAxios from "../hooks/useAxios";
-import { FaSearch, FaTimes } from "react-icons/fa";
+import { FaSearch, FaTimes, FaFilter } from "react-icons/fa";
 import useAuth from "../hooks/useAuth";
 
 function AllProduct() {
@@ -17,6 +17,7 @@ function AllProduct() {
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(1000); // Default price range
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   // Fetch Brands and Categories
   const { data: brandCategoryData, isLoading: brandCategoryLoading } = useQuery(
@@ -130,8 +131,8 @@ function AllProduct() {
   return (
     <>
       <div className="container mx-auto">
-        <div className="grid grid-cols-12 gap-10 mt-10">
-          <div className="col-span-3">
+        <div className="grid grid-cols-12 gap-5 lg:gap-10 mt-5 lg:mt-10">
+          <div className="col-span-3 lg:block hidden">
             {/* Search */}
             <div className="bg-[#28231D] py-5 rounded-lg mb-3">
               <p className="text-center text-xl font-semibold text-white">
@@ -240,11 +241,137 @@ function AllProduct() {
               Reset Filters
             </button>
           </div>
+          {/* sidebar */}
+          <div
+            className={`fixed overflow-y-scroll top-0 left-0 w-80 h-full bg-[#28231D] text-white transition-transform duration-300 ${
+              isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+            } md:translate-x-0 md:relative md:col-span-3`}
+          >
+            <button
+              className="absolute top-4 right-4 text-white text-2xl"
+              onClick={() => setIsSidebarOpen(false)}
+            >
+              <FaTimes />
+            </button>
+            {/* Search */}
+            <div className="bg-[#28231D] py-5 rounded-lg mb-3">
+              <p className="text-center text-xl font-semibold text-white">
+                Search
+              </p>
+              <form onSubmit={handleSearch}>
+                <div className="flex p-1 justify-center overflow-hidden rounded-lg my-2 relative">
+                  <input
+                    type="text"
+                    placeholder="Search Model Name.."
+                    onChange={(e) => setSearchText(e.target.value)}
+                    value={searchText}
+                    name="search"
+                    className="border-2 border-r-0 focus:outline-none px-3 rounded-2xl rounded-r-none"
+                  />
+                  {searchText && (
+                    <button
+                      type="button"
+                      onClick={clearSearch}
+                      className="absolute right-28 top-5 text-black"
+                    >
+                      <FaTimes />
+                    </button>
+                  )}
+                  <button
+                    className="btn rounded-2xl bg-[#28231D] hover:bg-inherit border rounded-l-none text-white hover:bg-txt-color"
+                    type="submit"
+                  >
+                    <FaSearch />
+                  </button>
+                </div>
+              </form>
+            </div>
+            {/* Brands Filter */}
+            <div className="bg-[#28231D] py-4 px-10 rounded-lg text-white mb-3">
+              <p className="text-center text-xl font-semibold">Mobile Brands</p>
+              <ul className="mt-3">
+                {brandCategoryData?.brands?.map((brand, index) => (
+                  <li key={index} className="text-white py-[1px]">
+                    <label>
+                      <input
+                        type="checkbox"
+                        value={brand}
+                        checked={selectedBrands.includes(brand)}
+                        onChange={() => handleBrandChange(brand)}
+                        className="mr-3"
+                      />
+                      {brand}
+                    </label>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            {/* Categories Filter */}
+            <div className="bg-[#28231D] py-4 px-10 rounded-lg text-white  mb-3">
+              <p className="text-center text-xl font-semibold">Categories</p>
+              <ul className="mt-3">
+                {brandCategoryData?.category?.map((category, index) => (
+                  <li key={index} className="text-white py-[2px]">
+                    <label>
+                      <input
+                        type="checkbox"
+                        value={category}
+                        checked={selectedCategories.includes(category)}
+                        onChange={() => handleCategoryChange(category)}
+                        className="mr-3"
+                      />
+                      {category}
+                    </label>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            {/* Price Range Filter */}
+            <div className="bg-[#28231D] py-4 rounded-lg text-white text-center mb-3">
+              <p className="text-xl font-semibold mb-3">Price Range</p>
+              <input
+                type="range"
+                min="0"
+                max="1000"
+                value={minPrice}
+                onChange={(e) =>
+                  handlePriceRangeChange(e.target.value, maxPrice)
+                }
+                className="mb-2"
+              />
+              <input
+                type="range"
+                min="0"
+                max="1000"
+                value={maxPrice}
+                onChange={(e) =>
+                  handlePriceRangeChange(minPrice, e.target.value)
+                }
+                className="mb-2"
+              />
+              <p className="text-white">
+                Min {minPrice} - Max {maxPrice}
+              </p>
+            </div>
+            {/* Reset Button */}
+            <button
+              className="btn bg-red-500 text-white mt-2 mb-5 w-full py-2 rounded"
+              onClick={handleReset}
+            >
+              Reset Filters
+            </button>
+          </div>
 
           {/* Mobile Boxes */}
-          <div className="col-span-9">
+          <div className="col-span-12 md:col-span-9 mt-5 lg:mt-0">
             <div className="mb-5 flex justify-between shadow-lg py-4 px-3">
-              <h4 className="text-xl">Phones</h4>
+              <h4 className="text-xl lg:block hidden">Phones</h4>
+              <button
+                className="bg-[#28231D] text-white md:hidden inline-flex items-center justify-center px-4 py-1"
+                onClick={() => setIsSidebarOpen(true)}
+              >
+                <FaFilter /> Filter
+              </button>
               <div>
                 <label htmlFor="sort" className="mr-2">
                   Sort by:
@@ -277,17 +404,19 @@ function AllProduct() {
                   </h2>
                 </div>
               )}
-              <div className="grid grid-cols-3 gap-10">
+              <div className="grid grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-10">
                 {mobiles.map((mobile) => (
                   <div
                     key={mobile.id}
-                    className="border p-4 flex items-center gap-5 rounded-md"
+                    className="border p-4 flex lg:flex-row flex-col items-center gap-3 lg:gap-5 rounded-md"
                   >
                     <div className="w-full">
                       <img src={mobile.image} alt={mobile.name} />
                     </div>
                     <div>
-                      <h2 className="text-xl font-semibold">{mobile.name}</h2>
+                      <h2 className="lg:text-xl font-semibold">
+                        {mobile.name}
+                      </h2>
                       <div className="divider my-1"></div>
                       <p className="text-[15px] text-black ">
                         Brand:{" "}
