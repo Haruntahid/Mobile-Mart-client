@@ -1,14 +1,15 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import useAxios from "../hooks/useAxios";
 import { FaSearch, FaTimes } from "react-icons/fa";
+import useAuth from "../hooks/useAuth";
 
 function AllProduct() {
   const axiosSecure = useAxios();
+  const { loading: authLoading } = useAuth();
 
-  const [count, setCount] = useState(0);
   const itemPerPage = 9;
   const [currentPage, setCurrentPage] = useState(1);
-  const [mobiles, setMobiles] = useState([]);
   const [search, setSearch] = useState("");
   const [searchText, setSearchText] = useState("");
   const [sort, setSort] = useState("");
@@ -16,22 +17,36 @@ function AllProduct() {
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(1000); // Default price range
-  const [brands, setBrands] = useState([]);
-  const [categories, setCategories] = useState([]);
 
-  const numberOfPages = Math.ceil(count / itemPerPage);
+  // Fetch Brands and Categories
+  const { data: brandCategoryData, isLoading: brandCategoryLoading } = useQuery(
+    {
+      queryKey: ["brandsCategories"],
+      queryFn: async () => {
+        const { data } = await axiosSecure("/brands");
+        return data;
+      },
+    }
+  );
 
-  const pages =
-    isNaN(numberOfPages) || numberOfPages < 1
-      ? []
-      : [...Array(numberOfPages).keys()].map((ele) => ele + 1);
-
-  useEffect(() => {
-    const getData = async () => {
-      const { data: unique } = await axiosSecure("/brands");
-      setBrands(unique.brands);
-      setCategories(unique.category);
-
+  // Fetch Mobiles
+  const {
+    data: mobileData,
+    isLoading: mobileLoading,
+    isFetching: mobileFetching,
+  } = useQuery({
+    queryKey: [
+      "mobiles",
+      currentPage,
+      itemPerPage,
+      search,
+      sort,
+      selectedBrands,
+      selectedCategories,
+      minPrice,
+      maxPrice,
+    ],
+    queryFn: async () => {
       const { data } = await axiosSecure(
         `/mobiles?page=${
           currentPage - 1
@@ -41,21 +56,17 @@ function AllProduct() {
           ","
         )}&minPrice=${minPrice}&maxPrice=${maxPrice}`
       );
-      setMobiles(data.mobile);
-      setCount(data.totalCount);
-    };
-    getData();
-  }, [
-    currentPage,
-    itemPerPage,
-    search,
-    axiosSecure,
-    sort,
-    selectedBrands,
-    selectedCategories,
-    minPrice,
-    maxPrice,
-  ]);
+      return data;
+    },
+  });
+
+  const count = mobileData?.totalCount || 0;
+  const mobiles = mobileData?.mobile || [];
+  const numberOfPages = Math.ceil(count / itemPerPage);
+  const pages =
+    isNaN(numberOfPages) || numberOfPages < 1
+      ? []
+      : [...Array(numberOfPages).keys()].map((ele) => ele + 1);
 
   const handlePaginationButton = (value) => {
     setCurrentPage(value);
@@ -109,6 +120,13 @@ function AllProduct() {
     setSearchText("");
   };
 
+  if (authLoading || brandCategoryLoading || mobileLoading)
+    return (
+      <div className="flex justify-center items-center h-[100vh]">
+        <div className="w-16 h-16 border-4 border-dashed rounded-full animate-spin dark:border-[#28231D]"></div>
+      </div>
+    );
+
   return (
     <>
       <div className="container mx-auto">
@@ -151,7 +169,7 @@ function AllProduct() {
             <div className="bg-[#28231D] py-4 px-10 rounded-lg text-white mb-3">
               <p className="text-center text-xl font-semibold">Mobile Brands</p>
               <ul className="mt-3">
-                {brands.map((brand, index) => (
+                {brandCategoryData?.brands?.map((brand, index) => (
                   <li key={index} className="text-white py-[1px]">
                     <label>
                       <input
@@ -171,7 +189,7 @@ function AllProduct() {
             <div className="bg-[#28231D] py-4 px-10 rounded-lg text-white  mb-3">
               <p className="text-center text-xl font-semibold">Categories</p>
               <ul className="mt-3">
-                {categories.map((category, index) => (
+                {brandCategoryData?.category?.map((category, index) => (
                   <li key={index} className="text-white py-[2px]">
                     <label>
                       <input
@@ -247,7 +265,19 @@ function AllProduct() {
             </div>
 
             <div className="min-h-[600px]">
-              <div className="grid grid-cols-3 gap-4">
+              {mobileFetching && (
+                <div className="flex justify-center items-center h-[80vh]">
+                  <div className="w-16 h-16 border-4 border-dashed rounded-full animate-spin dark:border-[#28231D]"></div>
+                </div>
+              )}
+              {!mobileFetching && mobiles.length === 0 && (
+                <div className="text-center mt-20">
+                  <h2 className="text-2xl font-semibold text-gray-500">
+                    No Mobiles Found
+                  </h2>
+                </div>
+              )}
+              <div className="grid grid-cols-3 gap-10">
                 {mobiles.map((mobile) => (
                   <div
                     key={mobile.id}
@@ -282,36 +312,37 @@ function AllProduct() {
                 ))}
               </div>
             </div>
-
-            {/* Pagination Controls */}
-            <div className="flex justify-center items-center mt-10">
-              <button
-                disabled={currentPage === 1}
-                className="btn bg-[#28231D] text-white"
-                onClick={() => handlePaginationButton(currentPage - 1)}
-              >
-                Prev
-              </button>
-              {pages.map((page) => (
+            {/* Pagination */}
+            <div className="flex justify-center mt-10">
+              <div className="inline-flex">
                 <button
-                  onClick={() => setCurrentPage(page)}
-                  className={
-                    currentPage === page
-                      ? "btn bg-[#28231D] text-white mx-2"
-                      : "btn bg-gray-300 text-black mx-2"
-                  }
-                  key={page}
+                  className="bg-gray-300 text-gray-800 py-2 px-4 rounded-l hover:bg-gray-400"
+                  onClick={() => handlePaginationButton(currentPage - 1)}
+                  disabled={currentPage === 1}
                 >
-                  {page}
+                  Prev
                 </button>
-              ))}
-              <button
-                className="btn bg-[#28231D] text-white"
-                disabled={currentPage === pages.length}
-                onClick={() => handlePaginationButton(currentPage + 1)}
-              >
-                Next
-              </button>
+                {pages.map((page) => (
+                  <button
+                    key={page}
+                    className={`${
+                      page === currentPage
+                        ? "bg-gray-800 text-white"
+                        : "bg-gray-300 text-gray-800"
+                    } py-2 px-4 hover:bg-gray-400`}
+                    onClick={() => handlePaginationButton(page)}
+                  >
+                    {page}
+                  </button>
+                ))}
+                <button
+                  className="bg-gray-300 text-gray-800 py-2 px-4 rounded-r hover:bg-gray-400"
+                  onClick={() => handlePaginationButton(currentPage + 1)}
+                  disabled={currentPage === numberOfPages}
+                >
+                  Next
+                </button>
+              </div>
             </div>
           </div>
         </div>

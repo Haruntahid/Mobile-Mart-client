@@ -4,29 +4,24 @@ import "swiper/css";
 import "swiper/css/effect-coverflow";
 import "swiper/css/pagination";
 import "swiper/css/autoplay";
-import { EffectCoverflow, Pagination, Autoplay } from "swiper/modules";
+import { Pagination, Autoplay, Navigation } from "swiper/modules";
 
 const Slider = () => {
   return (
-    <div className="w-full flex justify-end h-[700px]">
+    <div className="w-full flex justify-end h-[800px]">
       <Swiper
-        effect={"coverflow"}
-        grabCursor={true}
-        centeredSlides={true}
-        slidesPerView={"auto"}
-        coverflowEffect={{
-          rotate: 50,
-          stretch: 0,
-          depth: 100,
-          modifier: 1,
-          slideShadows: true,
+        slidesPerView={1}
+        spaceBetween={10}
+        loop={true}
+        pagination={{
+          clickable: true,
         }}
+        navigation={true}
+        modules={[Pagination, Navigation, Autoplay]}
         autoplay={{
           delay: 2500,
           disableOnInteraction: false,
         }}
-        pagination={true}
-        modules={[EffectCoverflow, Pagination, Autoplay]}
         className="mySwiper"
       >
         <SwiperSlide>

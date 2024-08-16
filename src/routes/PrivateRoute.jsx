@@ -1,7 +1,6 @@
 import PropTypes from "prop-types";
 import { Navigate, useLocation } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
-import { toast } from "react-toastify";
 
 function PrivateRoute({ children }) {
   const { user, loading } = useAuth();
@@ -20,7 +19,6 @@ function PrivateRoute({ children }) {
   }
   return (
     <>
-      {toast.error("For This Action You Need to Login")}
       <Navigate state={location.pathname} to="/login"></Navigate>;
     </>
   );
