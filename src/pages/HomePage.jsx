@@ -1,4 +1,5 @@
 import LatestPhones from "../components/LatestPhones";
+import MediaPartner from "../components/MediaPartner";
 import Slider from "../components/Slider";
 import useAuth from "../hooks/useAuth";
 
@@ -15,6 +16,7 @@ function HomePage() {
     <>
       <Slider />
       <LatestPhones />
+      <MediaPartner />
     </>
   );
 }
