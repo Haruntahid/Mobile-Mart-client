@@ -10,8 +10,13 @@ function Footer() {
       <div className="container mx-auto">
         <Link
           to={"/"}
-          className="text-4xl font-semibold mt-5 mb-5 block text-white text-center"
+          className="text-4xl justify-center font-semibold px-5 text-white flex items-center gap-3"
         >
+          <img
+            src="https://i.ibb.co/RhR7Vt9/user-interface.png"
+            alt=""
+            className="w-12 h-12"
+          />
           Mobile Mart
         </Link>
         <div className="divider container bg-gray-50 my-2 mx-auto h-[1px] rounded-sm"></div>

@@ -41,7 +41,15 @@ function Navbar() {
               </li>
             </ul>
           </div>
-          <Link to={"/"} className="text-4xl font-semibold px-5 text-white">
+          <Link
+            to={"/"}
+            className="text-4xl font-semibold px-5 text-white flex items-center gap-3"
+          >
+            <img
+              src="https://i.ibb.co/RhR7Vt9/user-interface.png"
+              alt=""
+              className="w-12 h-12"
+            />
             Mobile Mart
           </Link>
         </div>

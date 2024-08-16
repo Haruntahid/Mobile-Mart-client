@@ -58,14 +58,14 @@ function Registration() {
           <div className="w-full px-6 py-8 md:px-8 lg:w-1/2">
             <div className="flex justify-center mx-auto">
               <img
-                className="w-auto h-7 sm:h-8"
-                src="https://merakiui.com/images/logo.svg"
+                className="w-14 h-14"
+                src="https://i.ibb.co/RhR7Vt9/user-interface.png"
                 alt=""
               />
             </div>
 
             <p className="mt-3 text-xl text-center text-gray-600 ">
-              Get Your Free Account Now.
+              Get Your Account Now.
             </p>
 
             <div
@@ -197,7 +197,7 @@ function Registration() {
             className="hidden bg-cover lg:block lg:w-1/2"
             style={{
               backgroundImage:
-                "url(https://images.unsplash.com/photo-1627308595229-7830a5c91f9f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80)",
+                "url(https://i.ibb.co/jf7vRfG/HD-wallpaper-airpods-aesthetic-apple-evening-mobile-tech-technology.jpg)",
             }}
           ></div>
         </div>
