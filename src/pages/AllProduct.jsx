@@ -284,7 +284,7 @@ function AllProduct() {
             </div>
 
             {/* Pagination Controls */}
-            <div className="flex justify-center items-center mt-20">
+            <div className="flex justify-center items-center mt-10">
               <button
                 disabled={currentPage === 1}
                 className="btn bg-[#28231D] text-white"
