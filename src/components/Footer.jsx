@@ -10,18 +10,18 @@ function Footer() {
       <div className="container mx-auto">
         <Link
           to={"/"}
-          className="text-4xl justify-center font-semibold px-5 text-white flex items-center gap-3"
+          className="text-xl lg:text-4xl justify-center font-semibold px-5 text-white flex items-center gap-3 mb-5"
         >
           <img
             src="https://i.ibb.co/RhR7Vt9/user-interface.png"
             alt=""
-            className="w-12 h-12"
+            className="w-10 h-10 lg:w-12 lg:h-12"
           />
           Mobile Mart
         </Link>
         <div className="divider container bg-gray-50 my-2 mx-auto h-[1px] rounded-sm"></div>
 
-        <div className="flex justify-between my-6">
+        <div className="flex flex-col items-center lg:items-baseline lg:flex-row justify-between my-6 text-center lg:text-left space-y-6">
           <div className="">
             <p className="text-xl mb-3 text-gray-400">Support</p>
             <div className="inline-flex gap-2 items-center">
@@ -68,7 +68,7 @@ function Footer() {
           </div>
         </div>
         <div className="divider container bg-gray-50 my-2 mx-auto h-[1px] rounded-sm"></div>
-        <div className="flex justify-between">
+        <div className="flex justify-between px-3 lg:px-0">
           <p className="text-xs">
             © 2024 Mobile Mart Ltd | All rights reserved
           </p>

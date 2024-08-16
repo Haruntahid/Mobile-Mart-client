@@ -41,19 +41,21 @@ function LatestPhones() {
 
   return (
     <>
-      <div className="container mx-auto mt-10">
-        <p className="text-4xl font-bold text-center">Latest Phones</p>
-        <div className="grid grid-cols-4 gap-5 mt-8">
+      <div className="container mx-auto mt-8 lg:mt-10">
+        <p className="text-2xl lg:text-4xl font-bold text-center">
+          Latest Phones
+        </p>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 mt-4 lg:mt-8 px-3 lg:px-0">
           {mobiles.map((mobile) => (
             <div
               key={mobile.id}
-              className="border p-4 flex items-center gap-5 rounded-md shadow-xl"
+              className="border p-4 flex flex-col lg:flex-row items-center gap-5 rounded-md shadow-xl"
             >
               <div className="w-full">
                 <img src={mobile.image} alt={mobile.name} />
               </div>
               <div>
-                <h2 className="text-xl font-semibold">{mobile.name}</h2>
+                <h2 className="lg:text-xl font-semibold">{mobile.name}</h2>
                 <div className="divider my-1"></div>
                 <p className="text-[15px] text-black ">
                   Brand:{" "}

@@ -8,7 +8,7 @@ import { Pagination, Autoplay, Navigation } from "swiper/modules";
 
 const Slider = () => {
   return (
-    <div className="w-full flex justify-end h-[800px]">
+    <div className="w-full flex justify-end h-[300px] lg:h-[800px]">
       <Swiper
         slidesPerView={1}
         spaceBetween={10}

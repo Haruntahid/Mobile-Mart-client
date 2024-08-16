@@ -16,7 +16,7 @@ function MediaPartner() {
 
   return (
     <>
-      <p className="text-4xl font-bold text-center mt-10 mb-8">
+      <p className="text-2xl lg:text-4xl font-bold text-center mt-6 lg:mt-10 mb-4 lg:mb-8">
         Phone Partners
       </p>
       <div className="relative overflow-hidden h-32">
