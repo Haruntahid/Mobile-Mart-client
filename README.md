@@ -1,4 +1,4 @@
-# Mobile Mart
+# Mobile Mart 📱
 
 Mobile Mart is an online mobile phone store where users can browse and purchase various mobile devices. The application is built using React for the frontend and an Express.js server with MongoDB for the backend.
 
