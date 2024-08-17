@@ -243,7 +243,7 @@ function AllProduct() {
           </div>
           {/* sidebar */}
           <div
-            className={`fixed overflow-y-scroll top-0 left-0 w-80 h-full bg-[#28231D] text-white transition-transform duration-300 ${
+            className={`fixed block lg:hidden overflow-y-scroll top-0 left-0 w-80 h-full bg-[#28231D] text-white transition-transform duration-300 ${
               isSidebarOpen ? "translate-x-0" : "-translate-x-full"
             } md:translate-x-0 md:relative md:col-span-3`}
           >
